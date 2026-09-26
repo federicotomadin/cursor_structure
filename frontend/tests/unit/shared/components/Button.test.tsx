@@ -3,14 +3,14 @@ import { Button } from '@/shared/components/ui/Button';
 
 describe('Button', () => {
   it('renders the primary variant by default', () => {
-    render(<Button>Guardar</Button>);
+    render(<Button>Save</Button>);
 
-    expect(screen.getByRole('button', { name: 'Guardar' })).toHaveClass('btn', 'btn--primary');
+    expect(screen.getByRole('button', { name: 'Save' })).toHaveClass('btn', 'btn--primary');
   });
 
   it('applies the requested variant', () => {
-    render(<Button variant="secondary">Cancelar</Button>);
+    render(<Button variant="secondary">Cancel</Button>);
 
-    expect(screen.getByRole('button', { name: 'Cancelar' })).toHaveClass('btn--secondary');
+    expect(screen.getByRole('button', { name: 'Cancel' })).toHaveClass('btn--secondary');
   });
 });

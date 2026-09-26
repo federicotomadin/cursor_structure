@@ -6,9 +6,9 @@ test.describe('Create user', () => {
     const email = uniqueEmail();
     await page.goto('/');
 
-    await page.getByLabel('Nombre').fill('Ada Lovelace');
+    await page.getByLabel('Name').fill('Ada Lovelace');
     await page.getByLabel('Email').fill(email);
-    await page.getByRole('button', { name: 'Crear' }).click();
+    await page.getByRole('button', { name: 'Create' }).click();
 
     await expect(page).toHaveURL(/\/users\/[0-9a-f-]{36}$/);
     await expect(page.getByRole('heading', { name: 'Ada Lovelace' })).toBeVisible();
@@ -21,9 +21,9 @@ test.describe('Create user', () => {
     expect(seeded.ok()).toBe(true);
     await page.goto('/');
 
-    await page.getByLabel('Nombre').fill('Ada');
+    await page.getByLabel('Name').fill('Ada');
     await page.getByLabel('Email').fill(email);
-    await page.getByRole('button', { name: 'Crear' }).click();
+    await page.getByRole('button', { name: 'Create' }).click();
 
     await expect(page.getByRole('alert')).toContainText('already exists');
     await expect(page).toHaveURL('/');

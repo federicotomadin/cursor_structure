@@ -6,7 +6,7 @@ export function HomePage() {
 
   return (
     <section>
-      <h1>Crear usuario</h1>
+      <h1>Create user</h1>
       <CreateUserForm onCreated={(user) => navigate(`/users/${user.id}`)} />
     </section>
   );

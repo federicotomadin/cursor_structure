@@ -1,46 +1,46 @@
 # AGENTS.md
 
-Guía para agentes de IA (Cursor, Claude, Codex) que trabajan en este repo.
-Hay `AGENTS.md` específicos en [`frontend/`](frontend/AGENTS.md) y [`backend/`](backend/AGENTS.md).
+Guide for AI agents (Cursor, Claude, Codex) working in this repo.
+There are app-specific `AGENTS.md` files in [`frontend/`](frontend/AGENTS.md) and [`backend/`](backend/AGENTS.md).
 
-## Qué es
+## What this is
 
-Monorepo TypeScript con npm workspaces:
+TypeScript monorepo with npm workspaces:
 
-| Workspace                    | Paquete                  | Rol                                                          |
-| ---------------------------- | ------------------------ | ------------------------------------------------------------ |
-| `frontend/`                  | `@app/frontend`          | SPA React 19 + Vite + React Query + React Router             |
-| `backend/src/domain`         | `@app/domain`            | Entidades, value objects, contratos de repositorio           |
-| `backend/src/application`    | `@app/application`       | Casos de uso, puertos, DTOs, errores de aplicación           |
-| `backend/src/infrastructure` | `@app/infrastructure`    | Implementaciones de repositorios, servicios externos, config |
-| `backend/src/presentation`   | `@app/presentation`      | App NestJS: controllers, requests, filtros, wiring de DI     |
-| `backend/tests/unit`         | `@app/unit-tests`        | Tests unitarios de domain + application (Jest)               |
-| `backend/tests/integration`  | `@app/integration-tests` | Tests HTTP contra la app Nest (Jest + Supertest)             |
+| Workspace                    | Package                  | Role                                                  |
+| ---------------------------- | ------------------------ | ----------------------------------------------------- |
+| `frontend/`                  | `@app/frontend`          | React 19 SPA + Vite + React Query + React Router      |
+| `backend/src/domain`         | `@app/domain`            | Entities, value objects, repository contracts         |
+| `backend/src/application`    | `@app/application`       | Use cases, ports, DTOs, application errors            |
+| `backend/src/infrastructure` | `@app/infrastructure`    | Repository implementations, external services, config |
+| `backend/src/presentation`   | `@app/presentation`      | NestJS app: controllers, requests, filters, DI wiring |
+| `backend/tests/unit`         | `@app/unit-tests`        | Unit tests for domain + application (Jest)            |
+| `backend/tests/integration`  | `@app/integration-tests` | HTTP tests against the Nest app (Jest + Supertest)    |
 
-## Comandos (desde la raíz)
+## Commands (from the root)
 
 ```bash
 npm install
-npm run dev:back          # API en http://localhost:3000/api
-npm run dev:front         # SPA en http://localhost:5173 (proxy /api -> :3000)
+npm run dev:back          # API at http://localhost:3000/api
+npm run dev:front         # SPA at http://localhost:5173 (proxies /api -> :3000)
 npm run build             # backend (tsc -b) + frontend (vite build)
 npm run typecheck
 npm run lint
-npm test                  # unit + integration + frontend (rápidos, sin navegador)
+npm test                  # unit + integration + frontend (fast, no browser)
 npm run test:unit | test:integration | test:front
-npm run test:e2e          # Playwright: levanta back + front y prueba en Chromium
+npm run test:e2e          # Playwright: starts backend + frontend and tests in Chromium
 ```
 
-## Reglas no negociables
+## Non-negotiable rules
 
-1. **Regla de dependencias del backend**: `presentation -> infrastructure -> application -> domain`. Nunca al revés. ESLint lo valida.
-2. Toda lógica de negocio vive en `domain` o `application`, nunca en controllers ni componentes React.
-3. Todo cambio de comportamiento viene con tests en el proyecto correspondiente.
-4. Antes de terminar una tarea: `npm run typecheck && npm run lint && npm test` en verde.
-5. No commitear secretos. Variables de entorno en `.env` (ver `.env.example` en cada app).
+1. **Backend dependency rule**: `presentation -> infrastructure -> application -> domain`. Never the other way around. ESLint enforces it.
+2. All business logic lives in `domain` or `application`, never in controllers or React components.
+3. Every behavior change ships with tests in the matching project.
+4. Before finishing a task: `npm run typecheck && npm run lint && npm test` must be green.
+5. Never commit secrets. Environment variables go in `.env` (see `.env.example` in each app).
 
-## Dónde está cada cosa para Cursor
+## Where Cursor config lives
 
-- `.cursor/rules/` — convenciones que se aplican automáticamente según los archivos que se tocan.
-- `.cursor/skills/` — flujos paso a paso (crear feature de backend, de frontend, commits).
-- `.cursor/mcp.json` — servidores MCP del proyecto (docs, browser, GitHub).
+- `.cursor/rules/` — conventions applied automatically based on the files being edited.
+- `.cursor/skills/` — step-by-step workflows (backend feature, frontend feature, commits).
+- `.cursor/mcp.json` — project MCP servers (docs, browser, GitHub).

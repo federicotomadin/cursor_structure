@@ -9,9 +9,9 @@ const jsonResponse = (body: unknown, status = 200) =>
 
 const fillAndSubmit = async () => {
   const user = userEvent.setup();
-  await user.type(screen.getByLabelText('Nombre'), 'Ada');
+  await user.type(screen.getByLabelText('Name'), 'Ada');
   await user.type(screen.getByLabelText('Email'), 'ada@example.com');
-  await user.click(screen.getByRole('button', { name: 'Crear' }));
+  await user.click(screen.getByRole('button', { name: 'Create' }));
 };
 
 describe('CreateUserForm', () => {

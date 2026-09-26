@@ -1,24 +1,24 @@
 # Frontend — React + Vite
 
-Organización por features. Alias `@/` apunta a `src/`.
+Feature-based organization. The `@/` alias points to `src/`.
 
 ```
 frontend/
 ├── src/
 │   ├── main.tsx
-│   ├── app/                 composición de la app
+│   ├── app/                 app composition
 │   │   ├── App.tsx
 │   │   ├── router.tsx
 │   │   ├── layouts/
-│   │   └── providers/       QueryClient y otros providers globales
-│   ├── pages/               una por ruta; solo componen features, sin lógica
-│   ├── features/<feature>/  módulo vertical autocontenido
-│   │   ├── api/             llamadas HTTP + query keys
+│   │   └── providers/       QueryClient and other global providers
+│   ├── pages/               one per route; only compose features, no logic
+│   ├── features/<feature>/  self-contained vertical module
+│   │   ├── api/             HTTP calls + query keys
 │   │   ├── hooks/           useQuery / useMutation
 │   │   ├── components/
 │   │   ├── types.ts
-│   │   └── index.ts         API pública de la feature
-│   ├── shared/              reutilizable y agnóstico de negocio
+│   │   └── index.ts         public API of the feature
+│   ├── shared/              reusable, business-agnostic code
 │   │   ├── api/             http-client
 │   │   ├── components/ui/
 │   │   ├── config/
@@ -27,29 +27,29 @@ frontend/
 │   └── styles/
 └── tests/
     ├── setup.ts
-    ├── utils/               render con providers
-    ├── unit/                componentes y utilidades aisladas (Vitest)
-    ├── integration/         features completas con fetch mockeado (Vitest)
-    └── e2e/                 flujos reales en navegador contra el backend (Playwright)
-        ├── support/         datos de prueba y helpers
-        └── <flujo>/*.spec.ts
+    ├── utils/               render with providers
+    ├── unit/                isolated components and utilities (Vitest)
+    ├── integration/         full features with mocked fetch (Vitest)
+    └── e2e/                 real browser flows against the backend (Playwright)
+        ├── support/         test data and helpers
+        └── <flow>/*.spec.ts
 ```
 
-`playwright.config.ts` levanta su propio backend (`:3100`) y frontend (`:5174`), separados de los puertos de desarrollo; si ya están corriendo en esos puertos, los reutiliza.
+`playwright.config.ts` starts its own backend (`:3100`) and frontend (`:5174`), separate from the dev ports; if something is already running on those ports, it reuses it.
 
-## Convenciones clave
+## Key conventions
 
-- `pages` importa de `features/<x>` solo vía su `index.ts`. Una feature no importa de otra feature; lo compartido va a `shared/`.
-- Estado de servidor con React Query (nunca `useEffect` + `fetch`). Estado local con `useState`.
-- Todo acceso HTTP pasa por `shared/api/http-client.ts`.
-- Los tipos del frontend reflejan los DTOs de `@app/application` (contrato con el backend).
+- `pages` import from `features/<x>` only through its `index.ts`. A feature never imports from another feature; shared code goes to `shared/`.
+- Server state with React Query (never `useEffect` + `fetch`). Local state with `useState`.
+- All HTTP access goes through `shared/api/http-client.ts`.
+- Frontend types mirror the DTOs in `@app/application` (the contract with the backend).
 
-## Comandos
+## Commands
 
 ```bash
 npm run dev:front
 npm run test:front
 npm run test:e2e            # headless
-# desde frontend/: test:e2e:ui (interactivo), test:e2e:headed (navegador visible; SLOW_MO=500 para ralentizar), test:e2e:debug (inspector paso a paso)
+# from frontend/: test:e2e:ui (interactive), test:e2e:headed (visible browser; SLOW_MO=500 to slow it down), test:e2e:debug (step-by-step inspector)
 npm run build:front
 ```

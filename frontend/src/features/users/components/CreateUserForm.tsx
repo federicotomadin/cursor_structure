@@ -20,7 +20,7 @@ export function CreateUserForm({ onCreated }: CreateUserFormProps) {
   return (
     <form onSubmit={handleSubmit} className="form">
       <label>
-        Nombre
+        Name
         <input value={name} onChange={(e) => setName(e.target.value)} required minLength={2} />
       </label>
       <label>
@@ -29,7 +29,7 @@ export function CreateUserForm({ onCreated }: CreateUserFormProps) {
       </label>
       {createUser.error && <p role="alert">{createUser.error.message}</p>}
       <Button type="submit" disabled={createUser.isPending}>
-        {createUser.isPending ? 'Creando…' : 'Crear'}
+        {createUser.isPending ? 'Creating…' : 'Create'}
       </Button>
     </form>
   );

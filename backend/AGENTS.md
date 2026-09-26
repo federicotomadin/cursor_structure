@@ -1,53 +1,53 @@
 # Backend — NestJS + Clean Architecture
 
-Cada capa es un paquete npm independiente con su propio `tsconfig.json` (TypeScript project references).
-Eso hace explícitas las dependencias entre capas, como los proyectos de una solución .NET.
+Each layer is an independent npm package with its own `tsconfig.json` (TypeScript project references).
+This makes dependencies between layers explicit, like the projects in a .NET solution.
 
 ```
 backend/
 ├── src/
-│   ├── domain/            @app/domain          (sin dependencias)
+│   ├── domain/            @app/domain          (no dependencies)
 │   │   ├── entities/
 │   │   ├── value-objects/
-│   │   ├── repositories/  interfaces, no implementaciones
+│   │   ├── repositories/  interfaces, not implementations
 │   │   └── errors/
 │   ├── application/       @app/application     -> domain
-│   │   ├── common/        errores de aplicación, tokens de DI
-│   │   ├── ports/         interfaces de servicios externos
+│   │   ├── common/        application errors, DI tokens
+│   │   ├── ports/         interfaces for external services
 │   │   └── <feature>/
 │   │       ├── dtos/
 │   │       └── use-cases/
 │   ├── infrastructure/    @app/infrastructure  -> application, domain
 │   │   ├── config/
-│   │   ├── persistence/   implementaciones de repositorios
-│   │   ├── services/      implementaciones de puertos
+│   │   ├── persistence/   repository implementations
+│   │   ├── services/      port implementations
 │   │   └── infrastructure.module.ts
-│   └── presentation/      @app/presentation    -> todas
+│   └── presentation/      @app/presentation    -> all
 │       ├── main.ts
 │       ├── app.module.ts
-│       ├── setup-app.ts   prefijo, pipes y filtros compartidos con los tests
-│       ├── common/        filtros, guards, interceptors
+│       ├── setup-app.ts   prefix, pipes and filters shared with the tests
+│       ├── common/        filters, guards, interceptors
 │       └── modules/<feature>/
-│           ├── <feature>.module.ts      wiring de casos de uso con useFactory
+│           ├── <feature>.module.ts      use case wiring with useFactory
 │           ├── <feature>.controller.ts
-│           └── requests/                DTOs HTTP con class-validator
+│           └── requests/                HTTP DTOs with class-validator
 └── tests/
-    ├── unit/              @app/unit-tests        domain + application, con fakes
-    └── integration/       @app/integration-tests HTTP con Supertest
+    ├── unit/              @app/unit-tests        domain + application, with fakes
+    └── integration/       @app/integration-tests HTTP with Supertest
 ```
 
-## Convenciones clave
+## Key conventions
 
-- `domain` y `application` son TypeScript puro: **sin imports de `@nestjs/*`**.
-- Los casos de uso reciben dependencias por constructor (interfaces). Nest los instancia en `presentation` con `useFactory` + tokens (`USER_REPOSITORY`, etc.).
-- Cada capa expone su API pública desde su `index.ts`. Importar siempre `@app/<capa>`, nunca rutas internas de otra capa.
-- Mapeo de errores a HTTP centralizado en `presentation/common/filters/error.filter.ts`.
-- Los tests importan el código fuente vía `paths`/`moduleNameMapper`, no el `dist`.
+- `domain` and `application` are plain TypeScript: **no `@nestjs/*` imports**.
+- Use cases receive dependencies through the constructor (interfaces). Nest instantiates them in `presentation` with `useFactory` + tokens (`USER_REPOSITORY`, etc.).
+- Each layer exposes its public API from its `index.ts`. Always import `@app/<layer>`, never another layer's internal paths.
+- Error-to-HTTP mapping is centralized in `presentation/common/filters/error.filter.ts`.
+- Tests import source code via `paths`/`moduleNameMapper`, not `dist`.
 
-## Comandos
+## Commands
 
 ```bash
-npm run build:back          # tsc -b backend (respeta el orden de capas)
+npm run build:back          # tsc -b backend (respects layer order)
 npm run dev:back
 npm run test:unit
 npm run test:integration
