@@ -1,0 +1,39 @@
+{
+  "name": "cursor-structure",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "frontend",
+    "backend/src/*",
+    "backend/tests/*"
+  ],
+  "scripts": {
+    "dev:front": "npm run dev -w @app/frontend",
+    "dev:back": "npm run dev -w @app/presentation",
+    "build": "npm run build:back && npm run build:front",
+    "build:back": "tsc -b backend",
+    "build:front": "npm run build -w @app/frontend",
+    "test": "npm run test:unit && npm run test:integration && npm run test:front",
+    "test:unit": "npm test -w @app/unit-tests",
+    "test:integration": "npm test -w @app/integration-tests",
+    "test:front": "npm test -w @app/frontend",
+    "test:e2e": "npm run test:e2e -w @app/frontend",
+    "typecheck": "tsc -b backend && npm run typecheck -w @app/frontend && npm run typecheck -w @app/unit-tests && npm run typecheck -w @app/integration-tests",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.0",
+    "@types/node": "^22.15.0",
+    "eslint": "^9.30.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.3.0",
+    "prettier": "^3.6.0",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.35.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

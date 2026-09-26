@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./src/domain" },
+    { "path": "./src/application" },
+    { "path": "./src/infrastructure" },
+    { "path": "./src/presentation" }
+  ]
+}

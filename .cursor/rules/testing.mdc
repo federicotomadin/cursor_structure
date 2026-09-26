@@ -1,0 +1,40 @@
+---
+description: Where and how to write unit, integration and E2E tests for backend and frontend
+globs: backend/tests/**/*.ts,frontend/tests/**/*.ts,frontend/tests/**/*.tsx
+alwaysApply: false
+---
+
+# Testing
+
+| What is tested                                  | Project                     | File                         |
+| ----------------------------------------------- | --------------------------- | ---------------------------- |
+| Entities, value objects, use cases              | `backend/tests/unit`        | `<layer>/<feature>/*.spec.ts` |
+| HTTP endpoints end to end                       | `backend/tests/integration` | `<feature>/*.int-spec.ts`    |
+| Isolated components and utilities               | `frontend/tests/unit`       | `*.test.tsx`                 |
+| Full features (form + hook + mocked API)        | `frontend/tests/integration`| `*.test.tsx`                 |
+| Critical user flows, real frontend + backend    | `frontend/tests/e2e`        | `<flow>/*.spec.ts`           |
+
+Test folder structure mirrors the source structure.
+
+## Backend
+
+- Unit: no Nest, no IO. Use the fakes in `backend/tests/unit/fakes` (add new ones there), not Jest mocks for repositories.
+- Integration: boot the app with `createTestApp()` (uses `AppModule` + `setupApp`) and test with Supertest. Cover the happy path, 400 validation, 404 and 409.
+
+## Frontend
+
+- Render with `renderWithProviders` (QueryClient + Router).
+- Query by role or label (`getByRole`, `getByLabelText`), never by CSS class or test id when an accessible alternative exists.
+- Mock the network with `vi.spyOn(globalThis, 'fetch')`.
+
+## E2E (Playwright)
+
+- Critical flows only (few and valuable); edge cases belong in unit/integration.
+- No mocks: tests hit the real backend started by `playwright.config.ts`.
+- Accessible locators (`getByRole`, `getByLabel`) and web-first assertions (`await expect(locator).toBeVisible()`); never `waitForTimeout`.
+- Tests are independent: unique data via `uniqueEmail()` from `tests/e2e/support`; seed state through the API (`request.post`) instead of the UI.
+
+## Style
+
+- One behavior per `it`, named in present tense describing the outcome: `it('throws NotFoundError when the user does not exist')`.
+- Arrange / Act / Assert separated by a blank line.

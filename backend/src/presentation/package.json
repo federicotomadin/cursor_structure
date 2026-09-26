@@ -1,0 +1,28 @@
+{
+  "name": "@app/presentation",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/main.js",
+    "dev": "tsc -b && concurrently -k -n tsc,api \"tsc -b --watch --preserveWatchOutput\" \"node --watch dist/main.js\""
+  },
+  "dependencies": {
+    "@app/application": "0.1.0",
+    "@app/domain": "0.1.0",
+    "@app/infrastructure": "0.1.0",
+    "@nestjs/common": "^11.1.0",
+    "@nestjs/core": "^11.1.0",
+    "@nestjs/platform-express": "^11.1.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "concurrently": "^9.2.0"
+  }
+}

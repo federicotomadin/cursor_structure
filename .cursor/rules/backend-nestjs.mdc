@@ -1,0 +1,39 @@
+---
+description: NestJS conventions for controllers, modules and requests in presentation/infrastructure
+globs: backend/src/presentation/**/*.ts,backend/src/infrastructure/**/*.ts
+alwaysApply: false
+---
+
+# NestJS
+
+## Feature modules (`presentation/modules/<feature>/`)
+
+- One module per feature: `<feature>.module.ts`, `<feature>.controller.ts`, `requests/`.
+- Use cases are registered with `useFactory` and injected tokens:
+
+```ts
+{
+  provide: CreateUserUseCase,
+  useFactory: (users: UserRepository, ids: IdGenerator) => new CreateUserUseCase(users, ids),
+  inject: [USER_REPOSITORY, ID_GENERATOR],
+}
+```
+
+- Register every new module in `app.module.ts`.
+
+## Controllers
+
+- Thin: validate input, call **one** use case, return its DTO. No business logic.
+- Validate path params with pipes (`ParseUUIDPipe`, `ParseIntPipe`).
+- Type the body with a class in `requests/` using `class-validator`. Never use the application DTO as the body.
+
+## Errors
+
+- No try/catch in controllers. `ErrorFilter` maps `NotFoundError` → 404, `ConflictError` → 409, `DomainError` → 422.
+- New application error → extend `ApplicationError` and add its mapping in `common/filters/error.filter.ts`.
+
+## Infrastructure
+
+- Concrete implementations are registered in `InfrastructureModule` against their token (`{ provide: USER_REPOSITORY, useClass: ... }`).
+- Configuration only through `infrastructure/config`, never loose `process.env` reads.
+- `setup-app.ts` is the single source for the global prefix, pipes and filters (used by `main.ts` and the integration tests).

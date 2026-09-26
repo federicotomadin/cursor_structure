@@ -1,0 +1,39 @@
+---
+description: Dependency rule and responsibilities of each backend layer
+globs: backend/src/**/*.ts
+alwaysApply: false
+---
+
+# Clean Architecture — backend
+
+`presentation -> infrastructure -> application -> domain`. Arrows never point the other way.
+
+| Layer                 | May import                                         | Never                                     |
+| --------------------- | -------------------------------------------------- | ----------------------------------------- |
+| `@app/domain`         | nothing                                            | `@nestjs/*`, other layers, IO             |
+| `@app/application`    | `@app/domain`                                      | `@nestjs/*`, infrastructure, presentation |
+| `@app/infrastructure` | domain, application, `@nestjs/common`, drivers     | presentation                              |
+| `@app/presentation`   | all                                                | its own business logic                    |
+
+- Always import another layer through its package (`@app/domain`), never via relative paths (`../../domain/...`).
+- Everything another layer needs is exported from that layer's `index.ts`.
+- Interfaces implemented by infrastructure are declared inward: repositories in `domain/repositories`, other services in `application/ports`. DI tokens live in `application/common/tokens.ts`.
+
+```ts
+// ❌ use case coupled to Nest and to a concrete implementation
+@Injectable()
+export class CreateUserUseCase {
+  constructor(private readonly repo: InMemoryUserRepository) {}
+}
+
+// ✅ plain TS, depends on the domain interface
+export class CreateUserUseCase {
+  constructor(
+    private readonly users: UserRepository,
+    private readonly ids: IdGenerator,
+  ) {}
+}
+```
+
+- Entities are built with `Entity.create(...)` (validates invariants) and rehydrated with `Entity.restore(...)`.
+- Errors: `DomainError` for invariants, `NotFoundError`/`ConflictError` in application. Never throw `HttpException` outside presentation.

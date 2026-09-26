@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "noEmit": true,
+    "strictPropertyInitialization": false,
+    "types": ["node", "jest"],
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["../../src/*/index.ts"]
+    }
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
+}

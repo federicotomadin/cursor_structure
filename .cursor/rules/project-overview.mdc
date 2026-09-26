@@ -1,0 +1,27 @@
+---
+description: Monorepo layout, where each change belongs, and the definition of done
+alwaysApply: true
+---
+
+# Project
+
+npm workspaces monorepo: `frontend/` (React + Vite) and `backend/` (NestJS, Clean Architecture with one package per layer). See `AGENTS.md` at the root and in each app.
+
+## Where each change goes
+
+- Business rule → `backend/src/domain` (entity / value object) or `backend/src/application` (use case).
+- Persistence or external service → `backend/src/infrastructure`.
+- HTTP endpoint, request validation, DI wiring → `backend/src/presentation`.
+- UI → `frontend/src/features/<feature>`; reusable pieces in `frontend/src/shared`.
+
+## Definition of done
+
+1. New or updated tests in the right project (`backend/tests/unit`, `backend/tests/integration`, `frontend/tests`).
+2. `npm run typecheck && npm run lint && npm test` green from the root.
+3. If a backend DTO changes, update `frontend/src/features/<feature>/types.ts`.
+
+## General
+
+- Strict TypeScript. No `any`; use `unknown` and narrowing.
+- kebab-case file names in the backend (`create-user.use-case.ts`); PascalCase for React components (`UserCard.tsx`).
+- Do not add dependencies without justifying them in the response.

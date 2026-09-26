@@ -1,0 +1,34 @@
+---
+description: Feature-based structure, React Query and component patterns for the frontend
+globs: frontend/src/**/*.ts,frontend/src/**/*.tsx
+alwaysApply: false
+---
+
+# React
+
+## Structure
+
+- `app/` is composition (router, providers, layouts). `pages/` has one file per route, with no logic.
+- `features/<feature>/{api,hooks,components,types.ts,index.ts}`. Consumed only through its `index.ts`.
+- A feature never imports from another feature. Shared code goes to `shared/`.
+- Use the `@/` alias to cross top-level folders; relative imports inside the same feature.
+
+## Data
+
+- Server state always via React Query in `features/<feature>/hooks`. Query keys centralized in `api/<feature>.api.ts`.
+- HTTP only through `@/shared/api/http-client`.
+
+```tsx
+// ❌
+useEffect(() => { fetch('/api/users/' + id).then(r => r.json()).then(setUser); }, [id]);
+
+// ✅
+const { data: user, isPending, error } = useUser(id);
+```
+
+## Components
+
+- Function components, named exports, one component per file, props typed with an `interface`.
+- Always handle loading, error (`role="alert"`) and empty states.
+- Accessibility: inputs with a `<label>`, buttons with text or `aria-label`.
+- No `React.FC`, no default exports (unless a library requires it).
