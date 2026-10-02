@@ -43,4 +43,5 @@ npm run test:e2e          # Playwright: starts backend + frontend and tests in C
 
 - `.cursor/rules/` — conventions applied automatically based on the files being edited.
 - `.cursor/skills/` — step-by-step workflows (backend feature, frontend feature, commits).
+- `.cursor/commands/` — slash commands: `/review`, `/commit`, `/pr`, `/verify`.
 - `.cursor/mcp.json` — project MCP servers (docs, browser, GitHub).

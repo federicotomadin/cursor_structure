@@ -19,7 +19,8 @@ npm run dev:front  # http://localhost:5173
 ├── .cursor/
 │   ├── mcp.json               context7, playwright, github
 │   ├── rules/                 conventions applied by glob
-│   └── skills/                workflows: backend feature, frontend feature, commits
+│   ├── skills/                workflows: backend feature, frontend feature, commits
+│   └── commands/              slash commands: /review, /commit, /pr, /verify
 ├── frontend/                  @app/frontend  (React + Vite)
 │   ├── AGENTS.md
 │   ├── src/{app,pages,features,shared,styles}
@@ -51,3 +52,5 @@ Requires the `GITHUB_PERSONAL_ACCESS_TOKEN` environment variable to be available
 | `npm run lint`      | ESLint (includes the layer rule)           |
 | `npm test`          | Unit + integration + frontend              |
 | `npm run test:e2e`  | Playwright E2E (starts backend + frontend) |
+
+In Cursor chat, type `/` to run agent shortcuts: `/review`, `/commit`, `/pr`, `/verify`.
